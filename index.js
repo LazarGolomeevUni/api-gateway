@@ -84,3 +84,5 @@ app.use('/', (req, res, next) => {
 app.listen(8000, () => {
     console.log('API gateway is listening to port 8000')
 });
+
+module.exports = app;
