@@ -6,6 +6,20 @@ on:
       - main
 
 jobs:
+  load-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up JMeter
+      run: |
+        sudo apt-get update
+        sudo apt-get install jmeter
+
+    - name: Run load tests
+      run: jmeter -n -t tests/load/portify-load-test.jmx
+
   quality-check:
     name: Analyze
     runs-on: ubuntu-latest
@@ -56,7 +70,7 @@ jobs:
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
   build:
-    needs: quality-check
+    needs: [quality-check, load-test]
     name: Setup, Publish, and Deploy
     runs-on: ubuntu-latest
 
@@ -70,6 +84,9 @@ jobs:
 
       - name: Install Dependencies
         run: npm install
+
+      - name: Run Unit Tests
+        run: npm test
   
   # Test the key
       - name: Debug API Key
