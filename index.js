@@ -81,8 +81,8 @@ app.use('/', (req, res, next) => {
     return res.status(200).json({ "msg": "Hello from API" })
 });
 
-app.listen(8000, () => {
+const server = app.listen(8000, () => {
     console.log('API gateway is listening to port 8000')
 });
 
-module.exports = app;
+module.exports = { app, server };

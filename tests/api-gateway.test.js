@@ -1,7 +1,13 @@
 const request = require('supertest');
-const app = require('../index');
+const { app, server } = require('../index');
+
+
 
 describe('API Gateway', () => {
+
+  afterAll((done) => {
+    server.close(done);
+  });
   describe('GET api-gateway', () => {
     test('should get api-gateway', async () => {
       const response = await request(app)
