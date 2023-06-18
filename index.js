@@ -51,7 +51,7 @@ function authorizeUser(req, res, next) {
 
 
 //authentication
-app.use('/authentication', proxy('http://localhost:8001'));
+app.use('/authentication', proxy('http://35.204.22.130'));
 
 //posts
 app.use('/posts', authenticateToken, proxy('http://localhost:8002', {
