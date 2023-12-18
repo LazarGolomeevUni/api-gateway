@@ -5,13 +5,17 @@ const proxy = require('express-http-proxy');
 const jwt = require("jsonwebtoken");
 
 const app = express();
-app.use(cors());
+//app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:3000',
+    credentials: true
+  }));
 app.use(express.json());
 const UserRole = {
     USER: 'user',
     MODERATOR: 'moderator'
   };
-//trigger build
+
 function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1]
@@ -51,7 +55,7 @@ function authorizeUser(req, res, next) {
 
 
 //authentication
-app.use('/authentication', proxy('http://35.204.22.130'));
+app.use('/authentication', proxy('http://localhost:8001'));
 
 //posts
 app.use('/posts', authenticateToken, proxy('http://localhost:8002', {
@@ -61,10 +65,11 @@ app.use('/posts', authenticateToken, proxy('http://localhost:8002', {
     }
 }));
 
-//projects
-app.use('/projects', authenticateToken, proxy('http://localhost:8003', {
+//reviews
+app.use('/reviews', authenticateToken, proxy('http://localhost:8003', {
     proxyReqOptDecorator: function (proxyReqOpts, srcReq) {
         proxyReqOpts.headers['user'] = JSON.stringify(srcReq.user);
+        console.log("APIGATEWAYREVIEWs")
         return proxyReqOpts;
     }
 }));
@@ -81,8 +86,8 @@ app.use('/', (req, res, next) => {
     return res.status(200).json({ "msg": "Hello from API" })
 });
 
-const server = app.listen(8000, () => {
+app.listen(8000, () => {
     console.log('API gateway is listening to port 8000')
 });
 
-module.exports = { app, server };
+module.exports = app;
