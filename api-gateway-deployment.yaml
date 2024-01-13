@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway-deployment
+  labels:
+    app: api-gateway-microservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-gateway-microservice
+  template:
+    metadata:
+      labels:
+        app: api-gateway-microservice
+    spec:
+      containers:
+      - name: api-gateway-microservice
+        image: DOCKER_IMAGE
+        ports:
+        - name: http
+          containerPort: 8000
+        imagePullPolicy: Always
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
