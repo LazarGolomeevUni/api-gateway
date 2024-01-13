@@ -9,12 +9,17 @@ const app = express();
 app.use(cors({
     origin: 'http://localhost:3000',
     credentials: true
-  }));
+}));
+
+app.use(cors({
+    origin: 'http://the-library-club-s3.s3-website.eu-north-1.amazonaws.com',
+    credentials: true
+}));
 app.use(express.json());
 const UserRole = {
     USER: 'user',
     MODERATOR: 'moderator'
-  };
+};
 
 function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization']
@@ -47,7 +52,7 @@ function authorizeUser(req, res, next) {
         req.user = user
         if (user.role === UserRole.MODERATOR) {
             next()
-        }else{
+        } else {
             return res.sendStatus(403)
         }
     })
