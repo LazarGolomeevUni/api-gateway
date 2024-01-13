@@ -55,10 +55,10 @@ function authorizeUser(req, res, next) {
 
 
 //authentication
-app.use('/authentication', proxy('http://localhost:8001'));
+app.use('/authentication', proxy('http://a08eeeb545a564ac995465cc8884d1a9-603373734.eu-north-1.elb.amazonaws.com:8001'));
 
 //posts
-app.use('/posts', authenticateToken, proxy('http://localhost:8002', {
+app.use('/posts', authenticateToken, proxy('http://ad433771d77144427a0f9f307cd2e23f-1031396011.eu-north-1.elb.amazonaws.com:8002', {
     proxyReqOptDecorator: function (proxyReqOpts, srcReq) {
         proxyReqOpts.headers['user'] = JSON.stringify(srcReq.user);
         return proxyReqOpts;
@@ -75,7 +75,7 @@ app.use('/reviews', authenticateToken, proxy('http://localhost:8003', {
 }));
 
 //moderator
-app.use('/moderator', authorizeUser, proxy('http://localhost:8004', {
+app.use('/moderator', authorizeUser, proxy('http://a8a47aeffe52d4e9ca5259b278c02eda-874056980.eu-north-1.elb.amazonaws.com:8004', {
     proxyReqOptDecorator: function (proxyReqOpts, srcReq) {
         proxyReqOpts.headers['user'] = JSON.stringify(srcReq.user);
         return proxyReqOpts;
